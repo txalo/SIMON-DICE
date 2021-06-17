@@ -4,30 +4,34 @@ h1{
     margin: 30px 0;
 }
 
-.boton{
+.cuadro{
     height: 150px;
 }
 
-#boton-1{
+#cuadro-1{
     background-color:#7cfc00;
+    opacity: 0.75;
     margin: 0px 0px 20px 0px;
     border-top-left-radius: 150px;
 }
 
-#boton-2{
+#cuadro-2{
     background-color: #dc143c;
+    opacity: 0.75;
     margin: 0px 0px 20px 0px;
     border-top-right-radius: 150px;
 }
 
-#boton-3{
-    background-color: #ffd700; 
+#cuadro-3{
+    background-color: #ffd700;
+    opacity: 0.75; 
     margin: 20px 0px 0px 0px;
     border-bottom-left-radius: 150px;
 }
 
-#boton-4{
+#cuadro-4{
     background-color: #0000cd;
+    opacity: 0.75;
     margin: 20px 0px 0px 0px;
     border-bottom-right-radius: 150px;    
 }
