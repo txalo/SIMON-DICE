@@ -9,6 +9,10 @@ let secuencia = [];
 let turnoJugador = false;
 let correctasMax = 0;
 let secuenciador = 0;
+let record = 0;
+const $maxima = document.querySelector("#maxima .marcador");
+const $record = document.querySelector("#record .marcador");
+const $estado = document.querySelector("#estado div.alert");
 
 document.querySelector("#boton-empezar").onclick = function(){
   iniciarJuego();
@@ -17,12 +21,15 @@ document.querySelector("#boton-empezar").onclick = function(){
 
 
 function iniciarJuego(){
+  actualizarEstado ("Imita la secuencia...");
+  actualizarMaxima ("0");
   secuencia = [];
   agregarCiclo(secuencia);
   reproducirSecuencia(secuencia);
-  turnoJugador = true;
-  
+  turnoJugador = true;  
   secuenciador = 0;
+  correctasMax = 0;
+  $maxima.textContent = 0;  
 }
 
 function presionarCuadro (cuadro){
@@ -37,18 +44,25 @@ document.querySelectorAll(".cuadro").forEach(function(element){
       if (turnoJugador && (element.id === "cuadro-" + secuencia[secuenciador])){
         presionarCuadro(element);        
         secuenciador++;
-        correctasMax = (secuenciador > correctasMax) ? secuenciador : correctasMax;
-        //console.log (`Presionado ${element.id} - Secuenciador: ${secuenciador} - Secuencia valor : ${secuencia[secuenciador]}`);
-        document.querySelector("#estado div.alert").textContent = "Maxima secuencia correcta: " + correctasMax;
+        correctasMax = (secuenciador > correctasMax) ? secuenciador : correctasMax;        
+        actualizarMaxima(correctasMax);
+        if (correctasMax > record) actualizarRecord(correctasMax);
       }else{
-        
+        turnoJugador = false;
+        actualizarEstado("Fin del Juego. Presiona empezar para volver a jugar")
+
       }
 
       if (secuenciador == secuencia.length){
         turnoJugador = false;
         agregarCiclo(secuencia);
-        setTimeout(function(){reproducirSecuencia(secuencia)},2000);
+        //actualizarEstado("Atencion!");
+        setTimeout(function(){
+          reproducirSecuencia(secuencia);
+          //actualizarEstado("Tu turno ..."); 
+        },2000);
         turnoJugador = true;
+        
       } 
     }          
   
@@ -56,16 +70,31 @@ document.querySelectorAll(".cuadro").forEach(function(element){
 });
 
 function reproducirSecuencia(secuencia){
+  
   secuenciador = 0;
   for (let i = 0; i < secuencia.length; i++){
-    setTimeout(function(){presionarCuadro(document.querySelector("#cuadro-"+secuencia[i]))},i * 900);
-  }  
+    setTimeout(function(){presionarCuadro(document.querySelector("#cuadro-"+secuencia[i]))},i * 1000);
+  }
+  
 }
 
 function agregarCiclo (secuencia){
   //let numero = ((Math.random()* 100)%4);
   let numero = (Math.random() * (4 - 1) + 1);
   secuencia.push(Math.round(numero));
+}
+
+function actualizarEstado(mensaje){
+  $estado.textContent = mensaje;
+}
+
+function actualizarMaxima(maxima){
+  $maxima.textContent = maxima;
+}
+
+function actualizarRecord(nuevoRecord){
+  record = nuevoRecord;
+  $record.textContent = record;
 }
 
 

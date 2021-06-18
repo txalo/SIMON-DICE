@@ -1,7 +1,7 @@
 h1{
     text-align: center;
     font-weight: bold;
-    margin: 30px 0;
+    margin: 10px 0 20px;
     font-size: 3rem;
 }
 
@@ -15,7 +15,7 @@ h1{
 }
 
 .cuadro{
-    height: 150px;
+    height: 140px;
 }
 
 #cuadro-1{
@@ -46,3 +46,12 @@ h1{
     border-bottom-right-radius: 150px;    
 }
 
+#record, #maxima{
+    margin: 10px 20px 0 20px;
+    text-align: center;
+}
+
+.marcador {
+    font-size: 24px;
+    font-weight: bolder;
+}
