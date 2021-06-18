@@ -5,7 +5,25 @@ const sounds = {
     "cuadro-3": new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
     "cuadro-4": new Audio ("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
 };
-const secuencia = [];
+let secuencia = [];
+let turnoJugador = false;
+let correctasMax = 0;
+let secuenciador = 0;
+
+document.querySelector("#boton-empezar").onclick = function(){
+  iniciarJuego();
+}
+
+
+
+function iniciarJuego(){
+  secuencia = [];
+  agregarCiclo(secuencia);
+  reproducirSecuencia(secuencia);
+  turnoJugador = true;
+  
+  secuenciador = 0;
+}
 
 function presionarCuadro (cuadro){
   sounds[cuadro.id].play();
@@ -14,12 +32,31 @@ function presionarCuadro (cuadro){
 }
 
 document.querySelectorAll(".cuadro").forEach(function(element){
-  element.onclick = function(){
-    presionarCuadro(element);
-  }
+  
+    element.onclick = function(){
+      if (turnoJugador && (element.id === "cuadro-" + secuencia[secuenciador])){
+        presionarCuadro(element);        
+        secuenciador++;
+        correctasMax = (secuenciador > correctasMax) ? secuenciador : correctasMax;
+        //console.log (`Presionado ${element.id} - Secuenciador: ${secuenciador} - Secuencia valor : ${secuencia[secuenciador]}`);
+        document.querySelector("#estado div.alert").textContent = "Maxima secuencia correcta: " + correctasMax;
+      }else{
+        
+      }
+
+      if (secuenciador == secuencia.length){
+        turnoJugador = false;
+        agregarCiclo(secuencia);
+        setTimeout(function(){reproducirSecuencia(secuencia)},2000);
+        turnoJugador = true;
+      } 
+    }          
+  
+  
 });
 
 function reproducirSecuencia(secuencia){
+  secuenciador = 0;
   for (let i = 0; i < secuencia.length; i++){
     setTimeout(function(){presionarCuadro(document.querySelector("#cuadro-"+secuencia[i]))},i * 900);
   }  
@@ -31,12 +68,8 @@ function agregarCiclo (secuencia){
   secuencia.push(Math.round(numero));
 }
 
-for(let i = 0; i < 5;i++){
-  agregarCiclo(secuencia);
-  console.log(secuencia);
-}
 
-reproducirSecuencia(secuencia);
+//reproducirSecuencia(secuencia);
 /*
 $verde.onclick = function(){
   sounds["cuadro-1"].play();
