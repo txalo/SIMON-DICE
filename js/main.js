@@ -95,6 +95,7 @@ function actualizarMaxima(maxima){
 function actualizarRecord(nuevoRecord){
   record = nuevoRecord;
   $record.textContent = record;
+  //Prueba
 }
 
 
