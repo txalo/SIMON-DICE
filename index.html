@@ -14,58 +14,55 @@
     <div class="container px-4">
         <div class="row gx-5">
             <div class="col">
-                <h1> SIMON </h1>
+                <h1 class="display-1"> SIMON </h1>
             </div>
         </div>
         <div class="row gx-5" id="estado">
-            <div class="col-sm"></div>
-            <div class="col-sm-6">
+            
+            <div class="col-12">
                 <div class="alert alert-primary" role="alert">
                 Presione empezar.
                 </div>
             </div>
-            <div class="col-sm" id="boton-empezar">
-                <button class="btn btn-primary" name="empezar">Empezar</button>
+            <div class="d-grid col-6 mx-auto" id="boton-empezar">
+                <button class="btn btn-outline-secondary btn-lg" name="empezar">COMENZAR</button>
             </div>
-            <div class="col-sm"></div>            
+            
         </div>
-        <div class="row gx-5">
-            <div class="col-2"></div>
-            <div class="col-4">
-                <div class="p-3 border cuadro" id="cuadro-1"></div>
+        <div class="row">
+            
+            <div class="col-6 p-1">
+                <div class="cuadro" id="cuadro-1"></div>
             </div>
-            <div class="col-4">
-                <div class="p-3 border cuadro" id="cuadro-2"></div>
+            <div class="col-6 p-1">
+                <div class="cuadro" id="cuadro-2"></div>
             </div>
-            <div class="col-2"></div>
+            
         </div>
         
-        <div class="row gx-5">
-            <div class="col-2"></div>
-            <div class="col-4">
-                <div class="p-3 border cuadro" id="cuadro-3"></div>
+        <div class="row">
+            
+            <div class="col-6 p-1">
+                <div class="cuadro" id="cuadro-3"></div>
             </div>
-            <div class="col-4">
-                <div class="p-3 border cuadro" id="cuadro-4"></div>
+            <div class="col-6 p-1">
+                <div class="cuadro" id="cuadro-4"></div>
             </div>
-            <div class="col-2"></div>
+            
         </div>
-        <div class="row gx-5">
-            <div class="col-4"></div>
-            <div class="col-2">
-                <div class="alert alert-success" role="alert" id="record">
-                    <b>RECORD</b> <br>
-                    <span class="marcador">-</span>
+        <div class="row justify-content-center">
+            
+            <div class="col-6">
+                <div class="display-6" role="alert" id="record">
+                    RECORD: <span class="marcador">-</span>
                 </div>
             </div>
-            <div class="col-2"> 
-                <div class="alert alert-primary" role="alert" id="maxima">
-                    <b>MAXIMO</b> <br>
-                    <span class="marcador">-</span>
+            <div class="col-6"> 
+                <div class="display-6 text-align-center" role="alert" id="maxima">
+                    MAXIMO: <span class="marcador">-</span>
                 </div>
-
             </div>
-            <div class="col-4"></div>
+            
         </div>
     </div>
     <script src='js/main.js'></script>

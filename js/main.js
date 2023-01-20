@@ -69,8 +69,7 @@ document.querySelectorAll(".cuadro").forEach(function(element){
   
 });
 
-function reproducirSecuencia(secuencia){
-  
+function reproducirSecuencia(secuencia){  
   secuenciador = 0;
   for (let i = 0; i < secuencia.length; i++){
     setTimeout(function(){presionarCuadro(document.querySelector("#cuadro-"+secuencia[i]))},i * 1000);

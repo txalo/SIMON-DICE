@@ -15,32 +15,33 @@ h1{
 }
 
 .cuadro{
-    height: 140px;
+    height: 150px;
     opacity: 0.5;
+    border-radius: 15px;
+    border: 1px solid #222;
 }
 
 #cuadro-1{
     background-color:#7cfc00;
-    margin: 0px 0px 20px 0px;
-    border-top-left-radius: 150px;
+    /* border-top-left-radius: 150px; */
 }
 
 #cuadro-2{
     background-color: #dc143c;
-    margin: 0px 0px 20px 0px;
-    border-top-right-radius: 150px;
+    /* margin: 0px 0px 20px 0px; */
+    /* border-top-right-radius: 150px; */
 }
 
 #cuadro-3{
     background-color: #ffd700;
-    margin: 20px 0px 0px 0px;
-    border-bottom-left-radius: 150px;
+    /* margin: 20px 0px 0px 0px; */
+    /* border-bottom-left-radius: 150px; */
 }
 
 #cuadro-4{
     background-color: #0000cd;
-    margin: 20px 0px 0px 0px;
-    border-bottom-right-radius: 150px;    
+    /* margin: 20px 0px 0px 0px; */
+    /* border-bottom-right-radius: 150px;     */
 }
 
 #record, #maxima{
@@ -48,7 +49,3 @@ h1{
     text-align: center;
 }
 
-.marcador {
-    font-size: 24px;
-    font-weight: bolder;
-}
