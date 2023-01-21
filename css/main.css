@@ -1,3 +1,8 @@
+body{
+    background-color: #222;
+    color: azure;
+}
+
 h1{
     text-align: center;
     font-weight: bold;
@@ -18,33 +23,26 @@ h1{
     height: 150px;
     opacity: 0.5;
     border-radius: 15px;
-    border: 1px solid #222;
+    border: 1px solid #444;    
 }
 
 #cuadro-1{
-    background-color:#7cfc00;
-    /* border-top-left-radius: 150px; */
+    background-color:#7cfc00;    
 }
 
 #cuadro-2{
-    background-color: #dc143c;
-    /* margin: 0px 0px 20px 0px; */
-    /* border-top-right-radius: 150px; */
+    background-color: #dc143c;    
 }
 
 #cuadro-3{
-    background-color: #ffd700;
-    /* margin: 20px 0px 0px 0px; */
-    /* border-bottom-left-radius: 150px; */
+    background-color: #ffd700;    
 }
 
 #cuadro-4{
     background-color: #0000cd;
-    /* margin: 20px 0px 0px 0px; */
-    /* border-bottom-right-radius: 150px;     */
 }
 
-#record, #maxima{
+#record, #actual{
     margin: 10px 20px 0 20px;
     text-align: center;
 }
