@@ -5,80 +5,49 @@ const sounds = {
     "cuadro-3": new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
     "cuadro-4": new Audio ("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
 };
-let secuencia = [];
-let turnoJugador = false;
-let correctasMax = 0;
-let secuenciador = 0;
-let record = 0;
-const $maxima = document.querySelector("#maxima .marcador");
+
+const $actual = document.querySelector("#actual .marcador");
 const $record = document.querySelector("#record .marcador");
 const $estado = document.querySelector("#estado div.alert");
 
-document.querySelector("#boton-empezar").onclick = function(){
-  iniciarJuego();
+const ESTADO_JUEGO = {
+  secuencia: [],
+  secuenciador: 0,
+  turnoJugador: false,
+  correctas: 0,
+  record: 0
 }
 
-
-
 function iniciarJuego(){
-  actualizarEstado ("Imita la secuencia...");
-  actualizarMaxima ("0");
-  secuencia = [];
-  agregarCiclo(secuencia);
-  reproducirSecuencia(secuencia);
-  turnoJugador = true;  
-  secuenciador = 0;
-  correctasMax = 0;
-  $maxima.textContent = 0;  
+  actualizarEstado ("IMITA LA SECUENCIA");
+  actualizarContador ("0");
+  ESTADO_JUEGO.secuencia = [];
+  agregarCiclo(ESTADO_JUEGO.secuencia);
+  reproducirSecuencia(ESTADO_JUEGO);  
+  ESTADO_JUEGO.secuenciador = 0;
+  ESTADO_JUEGO.correctas = 0;  
 }
 
 function presionarCuadro (cuadro){
   sounds[cuadro.id].play();
-  cuadro.style.opacity = 1;
-  setTimeout(function(){cuadro.style.opacity = 0.75},500);
+  cuadro.style.opacity = 1; 
+  setTimeout(function(){cuadro.style.opacity = 0.5},500);
 }
 
-document.querySelectorAll(".cuadro").forEach(function(element){
-  
-    element.onclick = function(){
-      if (turnoJugador && (element.id === "cuadro-" + secuencia[secuenciador])){
-        presionarCuadro(element);        
-        secuenciador++;
-        correctasMax = (secuenciador > correctasMax) ? secuenciador : correctasMax;        
-        actualizarMaxima(correctasMax);
-        if (correctasMax > record) actualizarRecord(correctasMax);
-      }else{
-        turnoJugador = false;
-        actualizarEstado("Fin del Juego. Presiona empezar para volver a jugar")
-
+function reproducirSecuencia(estadoJuego){  
+  estadoJuego.secuenciador = 0; 
+  estadoJuego.turnoJugador = false; 
+  for (let i = 0; i < estadoJuego.secuencia.length; i++){
+    setTimeout(function(){
+      presionarCuadro(document.querySelector("#cuadro-"+estadoJuego.secuencia[i]));      
+      if (i == estadoJuego.secuencia.length-1){        
+        estadoJuego.turnoJugador = true;    
       }
-
-      if (secuenciador == secuencia.length){
-        turnoJugador = false;
-        agregarCiclo(secuencia);
-        //actualizarEstado("Atencion!");
-        setTimeout(function(){
-          reproducirSecuencia(secuencia);
-          //actualizarEstado("Tu turno ..."); 
-        },2000);
-        turnoJugador = true;
-        
-      } 
-    }          
-  
-  
-});
-
-function reproducirSecuencia(secuencia){  
-  secuenciador = 0;
-  for (let i = 0; i < secuencia.length; i++){
-    setTimeout(function(){presionarCuadro(document.querySelector("#cuadro-"+secuencia[i]))},i * 1000);
-  }
-  
+    },i * 1000);
+  }    
 }
 
-function agregarCiclo (secuencia){
-  //let numero = ((Math.random()* 100)%4);
+function agregarCiclo(secuencia){  
   let numero = (Math.random() * (4 - 1) + 1);
   secuencia.push(Math.round(numero));
 }
@@ -87,37 +56,41 @@ function actualizarEstado(mensaje){
   $estado.textContent = mensaje;
 }
 
-function actualizarMaxima(maxima){
-  $maxima.textContent = maxima;
+function actualizarContador(contador){
+  $actual.textContent = contador;
 }
 
 function actualizarRecord(nuevoRecord){
-  record = nuevoRecord;
-  $record.textContent = record;
-  //Prueba
+  ESTADO_JUEGO.record = nuevoRecord;
+  $record.textContent = ESTADO_JUEGO.record;  
 }
 
-
-//reproducirSecuencia(secuencia);
-/*
-$verde.onclick = function(){
-  sounds["cuadro-1"].play();
+document.querySelectorAll(".cuadro").forEach(function(element){
+  
+  element.onclick = function(){    
+    if (ESTADO_JUEGO.turnoJugador){
+      if (element.id === "cuadro-" + ESTADO_JUEGO.secuencia[ESTADO_JUEGO.secuenciador]){
+          presionarCuadro(element);        
+          ESTADO_JUEGO.secuenciador++;
+          ESTADO_JUEGO.correctas = (ESTADO_JUEGO.secuenciador > ESTADO_JUEGO.correctas) ? ESTADO_JUEGO.secuenciador : ESTADO_JUEGO.correctas;        
+          actualizarContador(ESTADO_JUEGO.correctas);
+          if (ESTADO_JUEGO.correctas > ESTADO_JUEGO.record) actualizarRecord(ESTADO_JUEGO.correctas);
+      }else{          
+          ESTADO_JUEGO.turnoJugador = false;
+          actualizarEstado("FIN DEL JUEGO!")
+      }
+        
+      if (ESTADO_JUEGO.secuenciador == ESTADO_JUEGO.secuencia.length){        
+        ESTADO_JUEGO.turnoJugador = false
+        agregarCiclo(ESTADO_JUEGO.secuencia);
+        setTimeout(function(){
+          reproducirSecuencia(ESTADO_JUEGO);
+        },500 * ESTADO_JUEGO.secuencia.length);        
+      } 
+    }
+  }            
+});
+  
+document.querySelector("#boton-empezar").onclick = function(){
+  iniciarJuego();
 }
-
-$rojo.onclick = function(){
-  sounds["cuadro-2"].play();
-  $rojo.style.backgroundColor = "#f00";
-  setTimeout(function(){$rojo.style.backgroundColor = "#dc143c"},200);
-}
-
-$amarillo.onclick = function(){
-  sounds["cuadro-3"].play();
-  $amarillo.style.backgroundColor = "#ff0";
-  setTimeout(function(){$amarillo.style.backgroundColor = "#ffd700"},200);
-}
-
-$azul.onclick = function(){
-  sounds["cuadro-4"].play();
-  $azul.style.opacity = 1;
-  setTimeout(function(){$azul.style.opacity = 0.75},200);
-}*/
