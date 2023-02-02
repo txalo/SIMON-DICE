@@ -32,38 +32,6 @@ function iniciarJuego(estadoJuego) {
   }, 2000);
   estadoJuego.secuenciador = 0;
   estadoJuego.correctas = 0;
-
-  /*document.querySelectorAll(".cuadro").forEach(function (element) {
-    element.onclick = function () {
-      if (ESTADO_JUEGO.turnoJugador) {
-        if (
-          element.id ===
-          "cuadro-" + ESTADO_JUEGO.secuencia[ESTADO_JUEGO.secuenciador]
-        ) {
-          presionarCuadro(element);
-          ESTADO_JUEGO.secuenciador++;
-          ESTADO_JUEGO.correctas =
-            ESTADO_JUEGO.secuenciador > ESTADO_JUEGO.correctas
-              ? ESTADO_JUEGO.secuenciador
-              : ESTADO_JUEGO.correctas;
-          actualizarContador(ESTADO_JUEGO.correctas, $actual);
-          if (ESTADO_JUEGO.correctas > ESTADO_JUEGO.record)
-            actualizarRecord(ESTADO_JUEGO.correctas, ESTADO_JUEGO, $record);
-        } else {
-          ESTADO_JUEGO.turnoJugador = false;
-          actualizarEstado("FIN DEL JUEGO!", $estado);
-        }
-
-        if (ESTADO_JUEGO.secuenciador == ESTADO_JUEGO.secuencia.length) {
-          ESTADO_JUEGO.turnoJugador = false;
-          agregarCiclo(ESTADO_JUEGO.secuencia);
-          setTimeout(function () {
-            reproducirSecuencia(ESTADO_JUEGO);
-          }, 400 * ESTADO_JUEGO.secuencia.length);
-        }
-      }
-    };
-  });*/
   manejarClick(estadoJuego)
 }
 
@@ -93,7 +61,7 @@ function manejarClick(estadoJuego) {
             actualizarRecord(estadoJuego.record);
           } else {
             estadoJuego.turnoJugador = false;
-            actualizarEstado('FIN DEL JUEGO');
+            actualizarEstado('FIN DEL JUEGO!');
           }
           
           if (estadoJuego.secuencia.length == estadoJuego.secuenciador){
@@ -109,6 +77,8 @@ function manejarClick(estadoJuego) {
 }
 
 function presionarCuadro(cuadro) {
+  sounds[cuadro.id].pause();
+  sounds[cuadro.id].currentTime = 0;
   sounds[cuadro.id].play();
   cuadro.style.opacity = 1;
   setTimeout(function () {
