@@ -9,9 +9,13 @@ h1{
     letter-spacing: .6em;
 }
 
+
 #boton-empezar{
     text-align: right;
     margin: 10px 0;
+}
+#estado{
+    display: none
 }
 
 .cuadro{
