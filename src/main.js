@@ -1,99 +1,156 @@
-
 const sounds = {
-    "cuadro-1": new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-    "cuadro-2": new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
-    "cuadro-3": new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-    "cuadro-4": new Audio ("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
+  "cuadro-1": new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
+  ),
+  "cuadro-2": new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
+  ),
+  "cuadro-3": new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
+  ),
+  "cuadro-4": new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
+  ),
 };
-
-const $actual = document.querySelector("#actual .marcador");
-const $record = document.querySelector("#record .marcador");
-const $estado = document.querySelector("#estado div.alert");
 
 const ESTADO_JUEGO = {
   secuencia: [],
   secuenciador: 0,
   turnoJugador: false,
   correctas: 0,
-  record: 0
-}
+  record: 0,
+};
 
-function iniciarJuego(estadoJuego){
-  actualizarContador ("0", $actual);
+function iniciarJuego(estadoJuego) {
+  actualizarContador("0");
   estadoJuego.secuencia = [];
-  agregarCiclo(estadoJuego.secuencia);  
-  actualizarEstado ("MEMORIZA LA SECUENCIA", $estado);
-  setTimeout(function(){
-    reproducirSecuencia(estadoJuego)
-    actualizarEstado ("IMITA LA SECUENCIA", $estado);
-  },2000);  
+  agregarCiclo(estadoJuego.secuencia);
+  actualizarEstado("MEMORIZA LA SECUENCIA");
+  setTimeout(function () {
+    reproducirSecuencia(estadoJuego);
+    actualizarEstado("IMITA LA SECUENCIA");
+  }, 2000);
   estadoJuego.secuenciador = 0;
-  estadoJuego.correctas = 0;  
-  
-  document.querySelectorAll(".cuadro").forEach(function(element){
-  
-    element.onclick = function(){    
-      if (ESTADO_JUEGO.turnoJugador){
-        if (element.id === "cuadro-" + ESTADO_JUEGO.secuencia[ESTADO_JUEGO.secuenciador]){
-            presionarCuadro(element);        
-            ESTADO_JUEGO.secuenciador++;
-            ESTADO_JUEGO.correctas = (ESTADO_JUEGO.secuenciador > ESTADO_JUEGO.correctas) ? ESTADO_JUEGO.secuenciador : ESTADO_JUEGO.correctas;        
-            actualizarContador(ESTADO_JUEGO.correctas, $actual);
-            if (ESTADO_JUEGO.correctas > ESTADO_JUEGO.record) actualizarRecord(ESTADO_JUEGO.correctas, ESTADO_JUEGO, $record);
-        }else{          
-            ESTADO_JUEGO.turnoJugador = false;
-            actualizarEstado("FIN DEL JUEGO!", $estado)
+  estadoJuego.correctas = 0;
+
+  /*document.querySelectorAll(".cuadro").forEach(function (element) {
+    element.onclick = function () {
+      if (ESTADO_JUEGO.turnoJugador) {
+        if (
+          element.id ===
+          "cuadro-" + ESTADO_JUEGO.secuencia[ESTADO_JUEGO.secuenciador]
+        ) {
+          presionarCuadro(element);
+          ESTADO_JUEGO.secuenciador++;
+          ESTADO_JUEGO.correctas =
+            ESTADO_JUEGO.secuenciador > ESTADO_JUEGO.correctas
+              ? ESTADO_JUEGO.secuenciador
+              : ESTADO_JUEGO.correctas;
+          actualizarContador(ESTADO_JUEGO.correctas, $actual);
+          if (ESTADO_JUEGO.correctas > ESTADO_JUEGO.record)
+            actualizarRecord(ESTADO_JUEGO.correctas, ESTADO_JUEGO, $record);
+        } else {
+          ESTADO_JUEGO.turnoJugador = false;
+          actualizarEstado("FIN DEL JUEGO!", $estado);
         }
-          
-        if (ESTADO_JUEGO.secuenciador == ESTADO_JUEGO.secuencia.length){        
-          ESTADO_JUEGO.turnoJugador = false
+
+        if (ESTADO_JUEGO.secuenciador == ESTADO_JUEGO.secuencia.length) {
+          ESTADO_JUEGO.turnoJugador = false;
           agregarCiclo(ESTADO_JUEGO.secuencia);
-          setTimeout(function(){
+          setTimeout(function () {
             reproducirSecuencia(ESTADO_JUEGO);
-          },400  * ESTADO_JUEGO.secuencia.length);        
-        } 
+          }, 400 * ESTADO_JUEGO.secuencia.length);
+        }
       }
-    }            
-  });
+    };
+  });*/
+  manejarClick(estadoJuego)
 }
 
-function presionarCuadro (cuadro){
+function manejarClick(estadoJuego) {
+  const $tablero = document.getElementById('tablero');
+
+  $tablero.onclick = function (elemento) {
+    const clickeado = elemento.target;
+    
+    if (clickeado.classList.contains("cuadro")) {
+      if (estadoJuego.turnoJugador) {
+        if (
+          clickeado.id ===
+          `cuadro-${estadoJuego.secuencia[estadoJuego.secuenciador]}`
+          ) {
+            presionarCuadro(clickeado);
+            estadoJuego.secuenciador++;
+            estadoJuego.correctas =
+            estadoJuego.secuenciador > estadoJuego.correctas
+            ? estadoJuego.secuenciador
+            : estadoJuego.correctas;
+            actualizarContador(estadoJuego.correctas);
+            estadoJuego.record =
+            estadoJuego.correctas > estadoJuego.record
+            ? estadoJuego.correctas
+            : estadoJuego.record;
+            actualizarRecord(estadoJuego.record);
+          } else {
+            estadoJuego.turnoJugador = false;
+            actualizarEstado('FIN DEL JUEGO');
+          }
+          
+          if (estadoJuego.secuencia.length == estadoJuego.secuenciador){
+            estadoJuego.turnoJugador = false;
+            agregarCiclo(estadoJuego.secuencia);
+            setTimeout(function () {
+              reproducirSecuencia(estadoJuego);
+            }, 400 * estadoJuego.secuencia.length);            
+          }
+        }
+    }
+  };
+}
+
+function presionarCuadro(cuadro) {
   sounds[cuadro.id].play();
-  cuadro.style.opacity = 1; 
-  setTimeout(function(){cuadro.style.opacity = 0.5},500);
+  cuadro.style.opacity = 1;
+  setTimeout(function () {
+    cuadro.style.opacity = 0.5;
+  }, 500);
 }
 
-function reproducirSecuencia(estadoJuego){  
-  estadoJuego.secuenciador = 0; 
-  estadoJuego.turnoJugador = false; 
-  for (let i = 0; i < estadoJuego.secuencia.length; i++){
-    setTimeout(function(){
-      presionarCuadro(document.querySelector("#cuadro-"+estadoJuego.secuencia[i]));      
-      if (i == estadoJuego.secuencia.length-1){        
-        estadoJuego.turnoJugador = true;    
+function reproducirSecuencia(estadoJuego) {
+  estadoJuego.secuenciador = 0;
+  estadoJuego.turnoJugador = false;
+  for (let i = 0; i < estadoJuego.secuencia.length; i++) {
+    setTimeout(function () {
+      presionarCuadro(
+        document.querySelector("#cuadro-" + estadoJuego.secuencia[i])
+      );
+      if (i == estadoJuego.secuencia.length - 1) {
+        estadoJuego.turnoJugador = true;
       }
-    },i * 800);
-  }    
+    }, i * 800);
+  }
 }
 
-function agregarCiclo(secuencia){  
-  let numero = (Math.random() * (4 - 1) + 1);
+function agregarCiclo(secuencia) {
+  let numero = Math.random() * (4 - 1) + 1;
   secuencia.push(Math.round(numero));
 }
 
-function actualizarEstado(mensaje, elemento){
-  elemento.textContent = mensaje;
+function actualizarEstado(mensaje) {
+  const $estado = document.querySelector("#estado div.alert");
+  $estado.textContent = mensaje;
 }
 
-function actualizarContador(contador, elemento){
-  elemento.textContent = contador;
+function actualizarContador(contador) {
+  const $contador = document.querySelector("#actual .marcador");
+  $contador.textContent = contador;
 }
 
-function actualizarRecord(nuevoRecord, estadoJuego, elemento){
-  estadoJuego.record = nuevoRecord;
-  elemento.textContent = estadoJuego.record;  
+function actualizarRecord(nuevoRecord) {
+  const $record = document.querySelector("#record .marcador");
+  $record.textContent = nuevoRecord;
 }
-  
-document.querySelector("#boton-empezar").onclick = function(){
+
+document.querySelector("#boton-empezar").onclick = function () {
   iniciarJuego(ESTADO_JUEGO);
-}
+};
