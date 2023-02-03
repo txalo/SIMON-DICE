@@ -1,18 +1,3 @@
-const sounds = {
-  "cuadro-1": new Audio(
-    "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
-  ),
-  "cuadro-2": new Audio(
-    "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
-  ),
-  "cuadro-3": new Audio(
-    "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
-  ),
-  "cuadro-4": new Audio(
-    "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
-  ),
-};
-
 const ESTADO_JUEGO = {
   secuencia: [],
   secuenciador: 0,
@@ -24,14 +9,13 @@ const ESTADO_JUEGO = {
 function iniciarJuego(estadoJuego) {
   actualizarContador("0");
   estadoJuego.secuencia = [];
-  agregarCiclo(estadoJuego.secuencia);
-  actualizarEstado("MEMORIZA LA SECUENCIA");
+  agregarCiclo(estadoJuego.secuencia);  
   setTimeout(function () {
-    reproducirSecuencia(estadoJuego);
-    actualizarEstado("IMITA LA SECUENCIA");
-  }, 2000);
+    reproducirSecuencia(estadoJuego);  
+  }, 4500);
   estadoJuego.secuenciador = 0;
   estadoJuego.correctas = 0;
+  mostrarAnimacionInicio();
   manejarClick(estadoJuego)
 }
 
@@ -61,7 +45,8 @@ function manejarClick(estadoJuego) {
             actualizarRecord(estadoJuego.record);
           } else {
             estadoJuego.turnoJugador = false;
-            actualizarEstado('FIN DEL JUEGO!');
+            destellarCuadros(3);
+            reproducirSonido('cuadro-4', 0.75);
           }
           
           if (estadoJuego.secuencia.length == estadoJuego.secuenciador){
@@ -77,13 +62,8 @@ function manejarClick(estadoJuego) {
 }
 
 function presionarCuadro(cuadro) {
-  sounds[cuadro.id].pause();
-  sounds[cuadro.id].currentTime = 0;
-  sounds[cuadro.id].play();
-  cuadro.style.opacity = 1;
-  setTimeout(function () {
-    cuadro.style.opacity = 0.5;
-  }, 500);
+  reproducirSonido(cuadro.id);
+  iluminarCuadro(cuadro);
 }
 
 function reproducirSecuencia(estadoJuego) {
@@ -124,3 +104,61 @@ function actualizarRecord(nuevoRecord) {
 document.querySelector("#boton-empezar").onclick = function () {
   iniciarJuego(ESTADO_JUEGO);
 };
+
+function iluminarCuadro(cuadro){
+  cuadro.style.opacity = 1;
+  setTimeout(function () {
+    cuadro.style.opacity = 0.5;
+  }, 400);
+}
+
+function animarCuadros(){
+  for (let i = 1; i <= 4; i++){
+    let cuadro = document.querySelector(`#cuadro-${i}`);    
+    setTimeout(function () { 
+      iluminarCuadro(cuadro);
+      reproducirSonido(cuadro.id,1.75);
+    }, i * 400);
+  }  
+}
+
+function destellarCuadros(destellos){
+  const $cuadros = document.querySelectorAll(".cuadro");
+  for (let i = 0; i < destellos; i++){
+    setTimeout(
+      function () {
+        $cuadros.forEach( (cuadro) => {
+          cuadro.style.opacity = 1;
+          setTimeout(function () {cuadro.style.opacity = 0.5;}, 400);
+        });
+      }, i * 1000);
+  }  
+}
+
+function mostrarAnimacionInicio(){  
+  destellarCuadros(2);
+  setTimeout( () => { animarCuadros(); }, 2000);
+}
+
+function reproducirSonido(cuadroID, velocidad = 1){
+  const sounds = {
+    "cuadro-1": new Audio(
+      "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
+    ),
+    "cuadro-2": new Audio(
+      "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
+    ),
+    "cuadro-3": new Audio(
+      "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
+    ),
+    "cuadro-4": new Audio(
+      "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
+    ),
+  };
+  const sonido = sounds[cuadroID];
+
+  sonido.pause();
+  sonido.playbackRate = velocidad;
+  sonido.currentTime = 0;
+  sonido.play();
+}
