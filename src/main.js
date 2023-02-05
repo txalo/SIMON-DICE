@@ -192,3 +192,4 @@ function reproducirSonido(cuadro, velocidad = 1) {
   sonido.currentTime = 0;
   sonido.play();
 }
+
