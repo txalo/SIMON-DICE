@@ -7,63 +7,68 @@ const ESTADO_JUEGO = {
 };
 
 function iniciarJuego(estadoJuego) {
+  resetearEstado(estadoJuego);
   actualizarContador("0");
-  estadoJuego.secuencia = [];
-  agregarCiclo(estadoJuego.secuencia);  
-  setTimeout(function () {
-    reproducirSecuencia(estadoJuego);  
-  }, 4500);
-  estadoJuego.secuenciador = 0;
-  estadoJuego.correctas = 0;
+  agregarCiclo(estadoJuego.secuencia);
   mostrarAnimacionInicio();
-  manejarClick(estadoJuego)
+  setTimeout(function () {
+    reproducirSecuencia(estadoJuego);
+  }, 4500);
+  manejarClick(estadoJuego);
 }
 
 function manejarClick(estadoJuego) {
-  const $tablero = document.getElementById('tablero');
+  const $tablero = document.getElementById("tablero");
 
   $tablero.onclick = function (elemento) {
     const clickeado = elemento.target;
-    
+
     if (clickeado.classList.contains("cuadro")) {
       if (estadoJuego.turnoJugador) {
         if (
           clickeado.id ===
           `cuadro-${estadoJuego.secuencia[estadoJuego.secuenciador]}`
-          ) {
-            presionarCuadro(clickeado);
-            estadoJuego.secuenciador++;
-            estadoJuego.correctas =
+        ) {
+          presionarCuadro(clickeado);
+          estadoJuego.secuenciador++;
+          estadoJuego.correctas =
             estadoJuego.secuenciador > estadoJuego.correctas
-            ? estadoJuego.secuenciador
-            : estadoJuego.correctas;
-            actualizarContador(estadoJuego.correctas);
-            estadoJuego.record =
+              ? estadoJuego.secuenciador
+              : estadoJuego.correctas;
+          actualizarContador(estadoJuego.correctas);
+        } else {
+          estadoJuego.turnoJugador = false;
+          const proximoCuadro = document.querySelector(
+            `#cuadro-${estadoJuego.secuencia[estadoJuego.secuenciador]}`
+          );
+          mostrarAnimacionError(proximoCuadro);
+          estadoJuego.record =
             estadoJuego.correctas > estadoJuego.record
-            ? estadoJuego.correctas
-            : estadoJuego.record;
-            actualizarRecord(estadoJuego.record);
-          } else {
-            estadoJuego.turnoJugador = false;
-            destellarCuadros(3);
-            reproducirSonido('cuadro-4', 0.75);
-          }
-          
-          if (estadoJuego.secuencia.length == estadoJuego.secuenciador){
-            estadoJuego.turnoJugador = false;
-            agregarCiclo(estadoJuego.secuencia);
-            setTimeout(function () {
-              reproducirSecuencia(estadoJuego);
-            }, 400 * estadoJuego.secuencia.length);            
-          }
+              ? estadoJuego.correctas
+              : estadoJuego.record;
+          actualizarRecord(estadoJuego.record);
         }
+
+        if (estadoJuego.secuencia.length == estadoJuego.secuenciador) {
+          estadoJuego.turnoJugador = false;
+          agregarCiclo(estadoJuego.secuencia);
+          setTimeout(function () {
+            reproducirSecuencia(estadoJuego);
+          }, 400 * estadoJuego.secuencia.length);
+        }
+      }
     }
   };
 }
 
-function presionarCuadro(cuadro) {
-  reproducirSonido(cuadro.id);
-  iluminarCuadro(cuadro);
+document.querySelector("#boton-empezar").onclick = function () {
+  iniciarJuego(ESTADO_JUEGO);
+};
+
+function resetearEstado(estadoJuego) {
+  estadoJuego.secuencia = [];
+  estadoJuego.secuenciador = 0;
+  estadoJuego.correctas = 0;
 }
 
 function reproducirSecuencia(estadoJuego) {
@@ -86,6 +91,11 @@ function agregarCiclo(secuencia) {
   secuencia.push(Math.round(numero));
 }
 
+function presionarCuadro(cuadro) {
+  reproducirSonido(cuadro);
+  iluminarCuadro(cuadro);
+}
+
 function actualizarEstado(mensaje) {
   const $estado = document.querySelector("#estado div.alert");
   $estado.textContent = mensaje;
@@ -101,46 +111,61 @@ function actualizarRecord(nuevoRecord) {
   $record.textContent = nuevoRecord;
 }
 
-document.querySelector("#boton-empezar").onclick = function () {
-  iniciarJuego(ESTADO_JUEGO);
-};
-
-function iluminarCuadro(cuadro){
+function iluminarCuadro(cuadro) {
   cuadro.style.opacity = 1;
   setTimeout(function () {
     cuadro.style.opacity = 0.5;
   }, 400);
 }
 
-function animarCuadros(){
-  for (let i = 1; i <= 4; i++){
-    let cuadro = document.querySelector(`#cuadro-${i}`);    
-    setTimeout(function () { 
+function animarCuadros() {
+  for (let i = 1; i <= 4; i++) {
+    let cuadro = document.querySelector(`#cuadro-${i}`);
+    setTimeout(function () {
       iluminarCuadro(cuadro);
-      reproducirSonido(cuadro.id,1.75);
+      reproducirSonido(cuadro, 1.75);
     }, i * 400);
-  }  
+  }
 }
 
-function destellarCuadros(destellos){
+function destellarCuadro(cuadro, destellos = 3) {
+  for (let i = 0; i < destellos; i++) {
+    setTimeout(function () {
+      cuadro.style.opacity = 1;
+      setTimeout(function () {
+        cuadro.style.opacity = 0.5;
+      }, 400);
+    }, 800 * i);
+  }
+}
+
+function destellarCuadros(destellos) {
   const $cuadros = document.querySelectorAll(".cuadro");
-  for (let i = 0; i < destellos; i++){
-    setTimeout(
-      function () {
-        $cuadros.forEach( (cuadro) => {
-          cuadro.style.opacity = 1;
-          setTimeout(function () {cuadro.style.opacity = 0.5;}, 400);
-        });
-      }, i * 1000);
-  }  
+  for (let i = 0; i < destellos; i++) {
+    setTimeout(function () {
+      $cuadros.forEach((cuadro) => {
+        cuadro.style.opacity = 1;
+        setTimeout(function () {
+          cuadro.style.opacity = 0.5;
+        }, 400);
+      });
+    }, i * 1000);
+  }
 }
 
-function mostrarAnimacionInicio(){  
-  destellarCuadros(2);
-  setTimeout( () => { animarCuadros(); }, 2000);
+function mostrarAnimacionInicio() {
+  animarCuadros();
+  setTimeout(() => {
+    destellarCuadros(2);
+  }, 2500);
 }
 
-function reproducirSonido(cuadroID, velocidad = 1){
+function mostrarAnimacionError(cuadro) {
+  destellarCuadro(cuadro);
+  reproducirSonido(cuadro, 0.5);
+}
+
+function reproducirSonido(cuadro, velocidad = 1) {
   const sounds = {
     "cuadro-1": new Audio(
       "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
@@ -155,7 +180,7 @@ function reproducirSonido(cuadroID, velocidad = 1){
       "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
     ),
   };
-  const sonido = sounds[cuadroID];
+  const sonido = sounds[cuadro.id];
 
   sonido.pause();
   sonido.playbackRate = velocidad;
