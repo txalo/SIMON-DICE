@@ -9,13 +9,13 @@ h1{
     letter-spacing: .6em;
 }
 
-#estado{
-    margin-bottom: 20px;
-}
 
 #boton-empezar{
     text-align: right;
     margin: 10px 0;
+}
+#estado{
+    display: none
 }
 
 .cuadro{
@@ -44,10 +44,8 @@ h1{
     border: 1px solid #316166;
 }
 
-#record, #actual{
-    margin: 10px 20px 0 20px;
+#record, #actual{    
     text-align: center;
     opacity: .5;
     color: #fff;
 }
-
