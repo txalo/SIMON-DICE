@@ -6,6 +6,11 @@ const ESTADO_JUEGO = {
   record: 0,
 };
 
+function obtbenerTiempoRetraso(){
+  const TIEMPO_RETRASO = 500;
+  return TIEMPO_RETRASO;
+}
+
 function iniciarJuego(estadoJuego) {
   resetearEstado(estadoJuego);
   actualizarContador("0");
@@ -13,7 +18,7 @@ function iniciarJuego(estadoJuego) {
   mostrarAnimacionInicio();
   setTimeout(function () {
     reproducirSecuencia(estadoJuego);
-  }, 4500);
+  }, obtbenerTiempoRetraso() * 13);
   manejarClick(estadoJuego);
 }
 
@@ -54,7 +59,7 @@ function manejarClick(estadoJuego) {
           agregarCiclo(estadoJuego.secuencia);
           setTimeout(function () {
             reproducirSecuencia(estadoJuego);
-          }, 400 * estadoJuego.secuencia.length);
+          }, obtbenerTiempoRetraso() * estadoJuego.secuencia.length);
         }
       }
     }
@@ -82,7 +87,7 @@ function reproducirSecuencia(estadoJuego) {
       if (i == estadoJuego.secuencia.length - 1) {
         estadoJuego.turnoJugador = true;
       }
-    }, i * 800);
+    }, i * obtbenerTiempoRetraso() * 2);
   }
 }
 
@@ -115,7 +120,7 @@ function iluminarCuadro(cuadro) {
   cuadro.style.opacity = 1;
   setTimeout(function () {
     cuadro.style.opacity = 0.5;
-  }, 400);
+  }, obtbenerTiempoRetraso());
 }
 
 function animarCuadros() {
@@ -124,7 +129,7 @@ function animarCuadros() {
     setTimeout(function () {
       iluminarCuadro(cuadro);
       reproducirSonido(cuadro, 1.75);
-    }, i * 400);
+    }, i * obtbenerTiempoRetraso());
   }
 }
 
@@ -134,8 +139,8 @@ function destellarCuadro(cuadro, destellos = 3) {
       cuadro.style.opacity = 1;
       setTimeout(function () {
         cuadro.style.opacity = 0.5;
-      }, 400);
-    }, 800 * i);
+      }, obtbenerTiempoRetraso());
+    }, i * obtbenerTiempoRetraso() * 2);
   }
 }
 
@@ -147,17 +152,17 @@ function destellarCuadros(destellos) {
         cuadro.style.opacity = 1;
         setTimeout(function () {
           cuadro.style.opacity = 0.5;
-        }, 400);
+        }, obtbenerTiempoRetraso());
       });
-    }, i * 1000);
+    }, i * obtbenerTiempoRetraso() * 2);
   }
 }
 
 function mostrarAnimacionInicio() {
   animarCuadros();
   setTimeout(() => {
-    destellarCuadros(2);
-  }, 2500);
+    destellarCuadros(3);
+  }, obtbenerTiempoRetraso() * 6);
 }
 
 function mostrarAnimacionError(cuadro) {
